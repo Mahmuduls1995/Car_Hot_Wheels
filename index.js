@@ -113,6 +113,21 @@ async function run() {
       const result = await bookingCollection.insertOne(booking)
       res.json(result)
     })
+    // GET ALL BOOKING API
+    app.get('/booking', async (req, res) => {
+      const cursor = bookingCollection.find({});
+      const result = await cursor.toArray();
+      res.json(result);
+    })
+
+    // GET Users BOOKING API
+    app.get('/users', async (req, res) => {
+      const cursor = usersCollection.find({});
+      const result = await cursor.toArray();
+      res.json(result);
+    })
+
+
     
 }
 run().catch(console.dir);
