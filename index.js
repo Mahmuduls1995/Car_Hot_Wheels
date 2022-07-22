@@ -128,7 +128,55 @@ async function run() {
     })
 
 
-    
+    // GET SINGLE BOOKING DETAILS API
+    app.get('/booking/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) }
+      const booking = await bookingCollection.findOne(query)
+      res.send(booking)
+    })
+
+    // GET MY BOOKING
+    app.get('/myBooking/:email', verifyToken, async (req, res) => {
+      const email = req.params.email;
+      if (req.decodedUserEmail === email) {
+        const query = { email: email };
+        const myBooking = await bookingCollection.find(query).toArray();
+        res.json(myBooking);
+      } else {
+        res.status(401).json({ message: 'User Not Authorize' })
+      }
+    })
+
+
+    // UPDATE SINGLE BOOKING DETAILS API
+    app.patch('/booking/:id', async (req, res) => {
+      const id = req.params.id;
+      const updateBooking = req.body;
+      const filter = { _id: ObjectId(id) }
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          status: updateBooking.status
+        },
+      };
+      const result = await bookingCollection.updateOne(filter, updateDoc, options)
+      res.json(result)
+    })
+    // DELETE SINGLE BOOKING DATA
+    app.delete('/deletedBooking/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) }
+      const result = await bookingCollection.deleteOne(query)
+      res.json(result)
+    })
+    // POST METHOD USER DETAILS
+    app.post('/users', async (req, res) => {
+      const user = req.body;
+      const result = await usersCollection.insertOne(user);
+      res.json(result)
+    })
+  
 }
 run().catch(console.dir);
 
