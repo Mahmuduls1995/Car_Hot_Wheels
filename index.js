@@ -210,11 +210,14 @@ async function run() {
       const result = await reviewCollection.insertOne(review);
       res.send(result)
     })
+    // GET ALL REVIEWS 
+    app.get('/review', async (req, res) => {
+      const cursor = reviewCollection.find({});
+      const result = await cursor.toArray();
+      res.json(result)
+    })
     
-  }
-  catch {
-    // await client.close();
-  }
+   
 }
 run().catch(console.dir);
 
