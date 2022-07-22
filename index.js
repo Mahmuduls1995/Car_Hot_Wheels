@@ -60,7 +60,19 @@ async function run() {
 
    
 
-    
+    // POST A CAR DATA , DETAILS
+    app.post('/availableCars', async (req, res) => {
+      const carDetails = req.body;
+      const result = await carsCollection.insertOne(carDetails);
+      res.send(result)
+    })
+    // GET ALL CARS DATA
+    app.get('/availableCars', async (req, res) => {
+      const cursor = carsCollection.find({});
+      const result = await cursor.toArray();
+      res.json(result)
+    })
+   
   }
   catch {
     // await client.close();
