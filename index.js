@@ -72,6 +72,33 @@ async function run() {
       const result = await cursor.toArray();
       res.json(result)
     })
+    // GET SINGLE CAR DATA
+    app.get('/availableCars/:id', async (req, res) => {
+      const id = req.params.id;
+      console.log('car id', id);
+      const query = { _id: ObjectId(id) }
+      const car = await carsCollection.findOne(query);
+      res.json(car)
+    })
+    // UPDATE SINGLE CAR DETAILS
+    app.put('/availableCars/:id', async (req, res) => {
+      const id = req.params.id;
+      const updatedCar = req.body;
+      const filter = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          name: updatedCar.name,
+          mileage: updatedCar.mileage,
+          price: updatedCar.price,
+          img: updatedCar.img,
+          details: updatedCar.details
+        },
+      };
+      const result = await carsCollection.updateOne(filter, updateDoc, options)
+      // res.send('updating not dationg')
+      res.json(result)
+    })
    
   }
   catch {
