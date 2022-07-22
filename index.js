@@ -176,7 +176,28 @@ async function run() {
       const result = await usersCollection.insertOne(user);
       res.json(result)
     })
-  
+    // USERS DATA UPDATE API
+    app.put('/users', async (req, res) => {
+      const user = req.body;
+      const filter = { email: user.email };
+      const options = { upsert: true };
+      const updateDoc = { $set: user }
+      const result = await usersCollection.updateOne(filter, updateDoc, options)
+      res.json(result)
+    })
+    // USER COLLECTION ADDED ADMIN ROLE / UPDATE ROLE FOR ADMIN
+    app.put('/users/admin', async (req, res) => {
+      const user = req.body;
+      const filter = { email: user.email }
+      const updateDoc = { $set: { role: 'admin' } }
+      const result = await usersCollection.updateOne(filter, updateDoc);
+      res.json(result)
+    })
+   
+  }
+  catch {
+    // await client.close();
+  }
 }
 run().catch(console.dir);
 
