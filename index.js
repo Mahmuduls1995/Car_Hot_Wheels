@@ -247,9 +247,27 @@ async function run() {
 
 
 
-    
+    // VERIFY ORDER CREATED 
+    app.post('/verifyOrder', async (req, res) => {
+      const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = await req.body;
+      console.log("sign", req.body)
+      const key_secret = process.env.RAZOR_PAY_KEY_SECRET;
+      let hmac = crypto.createHmac('sha256', key_secret);
+      hmac.update(razorpay_order_id + "|" + razorpay_payment_id);
+      const generated_signature = hmac.digest('hex');
 
+      if (razorpay_signature === generated_signature) {
+        res.json({ success: true, message: "Payment has been verified" })
+      }
+      else
+        res.json({ success: false, message: "Payment verification failed" })
+    });
+  }
+  catch {
+    // await client.close();
+  }
 
+  
 }
 run().catch(console.dir);
 
