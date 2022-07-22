@@ -217,7 +217,39 @@ async function run() {
       res.json(result)
     })
     
-   
+    // RAZOR PAY BY CHANDAN
+    app.post("/createOrder", async (req, res) => {
+      // STEP 1:
+      const orderDetails = req.body;
+      const { amount, currency, receipt, notes } = await orderDetails;
+      console.log(orderDetails)
+
+      try {
+        // STEP 2:    
+        instance.orders.create({ amount, currency, receipt, notes }, async function (err, order) {
+          //STEP 3 & 4: 
+          if (err) {
+            return res.status(500).json({
+              message: "Something Went Wrong",
+            });
+          }
+          console.log(order)
+          return res.status(200).json(order);
+        }
+        )
+      } catch (err) {
+        return res.status(500).json({
+          message: "Something Went Wrong",
+        });
+      }
+    })
+
+
+
+
+    
+
+
 }
 run().catch(console.dir);
 
