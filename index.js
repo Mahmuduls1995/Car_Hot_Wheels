@@ -204,7 +204,13 @@ async function run() {
       }
       res.json({ admin: isAdmin });
     })
-   
+    // REVIEW POST API 
+    app.post('/review', async (req, res) => {
+      const review = req.body;
+      const result = await reviewCollection.insertOne(review);
+      res.send(result)
+    })
+    
   }
   catch {
     // await client.close();
