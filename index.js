@@ -99,11 +99,21 @@ async function run() {
       // res.send('updating not dationg')
       res.json(result)
     })
-   
-  }
-  catch {
-    // await client.close();
-  }
+    // DELETE SINGLE CAR DATA
+    app.delete('/deletedCar/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) }
+      const result = await carsCollection.deleteOne(query)
+      res.json(result)
+    })
+    // POST BOOKING API
+    app.post('/booking', async (req, res) => {
+      const booking = req.body;
+      console.log('hit the post api', booking);
+      const result = await bookingCollection.insertOne(booking)
+      res.json(result)
+    })
+    
 }
 run().catch(console.dir);
 
